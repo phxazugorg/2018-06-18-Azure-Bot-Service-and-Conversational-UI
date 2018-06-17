@@ -6,6 +6,7 @@ using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Internals;
 using Microsoft.Bot.Connector;
+using Microsoft.Bot.Sample.SimpleEchoBot;
 
 namespace SimpleEchoBot
 {
@@ -33,6 +34,11 @@ namespace SimpleEchoBot
                         .Keyed<IBotDataStore<BotData>>(AzureModule.Key_DataStore)
                         .AsSelf()
                         .SingleInstance();
+
+
+                    builder.RegisterType<TextToSpeakActivityMapper>()
+                    .AsImplementedInterfaces()
+                    .SingleInstance();
 
                 });
             GlobalConfiguration.Configure(WebApiConfig.Register);

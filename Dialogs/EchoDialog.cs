@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Builder.Dialogs;
 using System.Net.Http;
-
+using Microsoft.Bot.Builder.FormFlow;
 
 namespace Microsoft.Bot.Sample.SimpleEchoBot
 {
@@ -31,11 +31,23 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     "Didn't get that!",
                     promptStyle: PromptStyle.Auto);
             }
+            else if (message.Text == "survey")
+            {
+                var survey = new FormDialog<SurveyForm>(new SurveyForm(), SurveyForm.BuildForm, FormOptions.PromptInStart, null);
+                context.Call<SurveyForm>(survey, ResumeAfterSurvey);
+            }
             else
             {
                 await context.PostAsync($"{this.count++}: You said {message.Text}");
                 context.Wait(MessageReceivedAsync);
             }
+        }
+
+        private async Task ResumeAfterSurvey(IDialogContext context, IAwaitable<SurveyForm> result)
+        {
+            var surveyResult = await result;
+            await context.PostAsync("Thank you for participating!");
+            context.Wait(MessageReceivedAsync);
         }
 
         public async Task AfterResetAsync(IDialogContext context, IAwaitable<bool> argument)
