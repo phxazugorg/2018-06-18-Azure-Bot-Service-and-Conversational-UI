@@ -66,7 +66,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                                 try
                                 {
                                     // send a welcome message to the user
-                                    reply.Text = "Welcome to the Taxi Reservation Bot!";
+                                    reply.Text = "Welcome to the Taxi Reservation Bot! Type Help at anytime to see what I can do for you.";
                                 }
                                 catch (Exception e)
                                 {
