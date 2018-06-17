@@ -45,8 +45,24 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
 
         private async Task ResumeAfterSurvey(IDialogContext context, IAwaitable<SurveyForm> result)
         {
-            var surveyResult = await result;
-            await context.PostAsync("Thank you for participating!");
+            try
+            {
+                var surveyResult = await result;
+                await context.PostAsync("Thank you for participating!");
+            }
+            catch (FormCanceledException<SurveyForm> e)
+            {
+                string reply;
+                if (e.InnerException == null)
+                {
+                    reply = $"You quit on {e.Last} -- maybe you can finish next time!";
+                }
+                else
+                {
+                    reply = "Sorry, I've had a short circuit. Please try again.";
+                }
+                await context.PostAsync(reply);
+            }
             context.Wait(MessageReceivedAsync);
         }
 
