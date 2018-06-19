@@ -31,10 +31,10 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     "Didn't get that!",
                     promptStyle: PromptStyle.Auto);
             }
-            else if (message.Text == "survey")
+            else if (message.Text.ToLower() == "ride")
             {
-                var survey = new FormDialog<SurveyForm>(new SurveyForm(), SurveyForm.BuildForm, FormOptions.PromptInStart, null);
-                context.Call<SurveyForm>(survey, ResumeAfterSurvey);
+                var reservation = new FormDialog<RideReservation>(new RideReservation(), RideReservation.BuildForm, FormOptions.PromptInStart, null);
+                context.Call<RideReservation>(reservation, ResumeAfterReservation);
             }
             else
             {
@@ -43,12 +43,12 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             }
         }
 
-        private async Task ResumeAfterSurvey(IDialogContext context, IAwaitable<SurveyForm> result)
+        private async Task ResumeAfterReservation(IDialogContext context, IAwaitable<RideReservation> result)
         {
             try
             {
-                var surveyResult = await result;
-                await context.PostAsync("Thank you for participating!");
+                var ReservationResult = await result;
+                await context.PostAsync("Thank you!");
             }
             catch (FormCanceledException<SurveyForm> e)
             {
