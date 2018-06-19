@@ -7,6 +7,7 @@ using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Builder.FormFlow;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Microsoft.Bot.Sample.SimpleEchoBot
 {
@@ -14,6 +15,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
     [Serializable]
     public class LuisDialog : LuisDialog<object>
     {
+        [NonSerialized]
+        Timer t;
+
         [LuisIntent("")]
         [LuisIntent("None")]
         public async Task None(IDialogContext context, LuisResult result)
@@ -38,8 +42,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         {
             try
             {
-                var ReservationResult = await result;
-                await context.PostAsync("Thank you!");
+                var reservation = await result;
+                SetTimer(context.Activity.AsMessageActivity(), reservation);
+                await context.PostAsync("Thank you for your reservation! You will receive a notification when the driver arrives.");
             }
             catch (FormCanceledException<RideReservation> e)
             {
@@ -55,6 +60,29 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 await context.PostAsync(reply);
             }
             context.Wait(this.MessageReceived);
+        }
+
+        private void SetTimer(IMessageActivity message, RideReservation reservation)
+        {
+            //We need to keep this data so we know who to send the message to. Assume this would be stored somewhere, e.g. an Azure Table
+            ConversationStarter.toId = message.From.Id;
+            ConversationStarter.toName = message.From.Name;
+            ConversationStarter.fromId = message.Recipient.Id;
+            ConversationStarter.fromName = message.Recipient.Name;
+            ConversationStarter.serviceUrl = message.ServiceUrl;
+            ConversationStarter.channelId = message.ChannelId;
+            ConversationStarter.conversationId = message.Conversation.Id;
+            ConversationStarter.reservation = reservation;
+
+            //We create a timer to simulate some background process or trigger
+            t = new Timer(new TimerCallback(TimerEvent));
+            t.Change(5000, Timeout.Infinite);
+        }
+
+        private void TimerEvent(object state)
+        {
+            t.Dispose();
+            ConversationStarter.Resume(ConversationStarter.conversationId, ConversationStarter.channelId); //We don't need to wait for this, just want to start the interruption here
         }
     }
 }
