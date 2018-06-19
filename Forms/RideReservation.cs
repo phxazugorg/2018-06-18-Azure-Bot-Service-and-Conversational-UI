@@ -62,6 +62,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
 
         private static async Task GenerateHeroCardConfirmMessage(IMessageActivity confirmation, RideReservation state)
         {
+            var messageText = "Ready to submit your reservation?";
+            var cardText = confirmation.Text.Replace(messageText, "").Trim();
+
+            confirmation.Text = messageText;
+
             List<CardImage> cardImages = new List<CardImage>();
             cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,300&wp.0={state.Origin};64;1&wp.1={state.Destination};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
 
@@ -69,7 +74,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             {
                 Title = $"",
                 Subtitle = $"",
-                Images = cardImages
+                Images = cardImages,
+                Text = cardText
             };
 
             Attachment confirmAttachment = confirmCard.ToAttachment();
@@ -85,7 +91,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             {
                 Title = $"Trip Summary",
                 Subtitle = $"",
-                Images = cardImages
+                Images = cardImages,
+                Text = confirmation.Text
             };
 
             Attachment confirmAttachment = confirmCard.ToAttachment();
