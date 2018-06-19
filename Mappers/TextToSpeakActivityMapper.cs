@@ -27,6 +27,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 }
             }
 
+            // TEST
+            message.Text += $" - [Channel: {message.ChannelId}, Speech Support: {channelCapability.SupportsSpeak()}";
+
             return message;
         }
     }
