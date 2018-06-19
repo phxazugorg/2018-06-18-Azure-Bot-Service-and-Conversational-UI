@@ -13,9 +13,10 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
     {
         protected int count = 1;
 
-        public async Task StartAsync(IDialogContext context)
+        public Task StartAsync(IDialogContext context)
         {
             context.Wait(MessageReceivedAsync);
+            return Task.CompletedTask;
         }
 
         public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)

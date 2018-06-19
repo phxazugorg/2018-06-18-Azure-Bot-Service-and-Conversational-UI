@@ -21,9 +21,9 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
     public class RideReservation
     {
         [Prompt("Where you want the ride to pick you up?")]
-        public string Origin { get; set; }
-        [Prompt("Where is your {&}?")]
-        public string Destination { get; set; }
+        public string PickUpLocation { get; set; }
+        [Prompt("Where is you want to go?")]
+        public string DropLocation { get; set; }
         [Prompt("What time do you want your ride to arrive?")]
         [Optional]
         [Template(TemplateUsage.NoPreference, "Now")]
@@ -35,8 +35,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         {
             return new FormBuilder<RideReservation>()
                 .Prompter(MyPrompter)
-                .Field(nameof(Origin))
-                .Field(nameof(Destination))
+                .Field(nameof(PickUpLocation))
+                .Field(nameof(DropLocation))
                 .Field(nameof(PickupTime))
                 .Field(nameof(VehicleType))
                 .AddRemainingFields()            
@@ -60,7 +60,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             return prompt;
         }
 
-        private static async Task GenerateHeroCardConfirmMessage(IMessageActivity confirmation, RideReservation state)
+        private static Task GenerateHeroCardConfirmMessage(IMessageActivity confirmation, RideReservation state)
         {
             var messageText = "Ready to submit your reservation?";
             var cardText = confirmation.Text.Replace(messageText, "").Trim();
@@ -68,7 +68,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             confirmation.Text = messageText;
 
             List<CardImage> cardImages = new List<CardImage>();
-            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.Origin};64;1&wp.1={state.Destination};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
+            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.PickUpLocation};64;1&wp.1={state.DropLocation};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
 
             HeroCard confirmCard = new HeroCard()
             {
@@ -80,12 +80,13 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
 
             Attachment confirmAttachment = confirmCard.ToAttachment();
             confirmation.Attachments.Add(confirmAttachment);
+            return Task.CompletedTask;
         }
 
-        private static async Task GenerateReceiptCardConfirmMessage(IMessageActivity confirmation, RideReservation state)
+        private static Task GenerateReceiptCardConfirmMessage(IMessageActivity confirmation, RideReservation state)
         {
             List<CardImage> cardImages = new List<CardImage>();
-            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.Origin};64;1&wp.1={state.Destination};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
+            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.PickUpLocation};64;1&wp.1={state.DropLocation};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
 
             HeroCard confirmCard = new HeroCard()
             {
@@ -97,7 +98,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
 
             Attachment confirmAttachment = confirmCard.ToAttachment();
             confirmation.Attachments.Add(confirmAttachment);
+            return Task.CompletedTask;
         }
-
     }
 }
