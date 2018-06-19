@@ -27,13 +27,13 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         public virtual async Task<HttpResponseMessage> Post([FromBody] Activity activity)
         {
             // check if activity is of type message
-            if (activity != null && activity.GetActivityType() == ActivityTypes.Message)
+            if (activity != null && activity.GetActivityType() == ActivityTypes.Message && !string.IsNullOrEmpty(activity.Text))
             {
                 await Conversation.SendAsync(activity, () => new EchoDialog());
             }
             else
             {
-                HandleSystemMessage(activity);
+                await HandleSystemMessage(activity);
             }
             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
         }
