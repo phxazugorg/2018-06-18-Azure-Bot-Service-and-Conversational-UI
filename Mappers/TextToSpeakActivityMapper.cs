@@ -39,7 +39,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             if (!string.IsNullOrEmpty(message.Text))
             {
                 message.Speak = message.Text;
-                isQuestion = message.Text.EndsWith("?");
+                isQuestion = message.Text.Trim().EndsWith("?");
             }
             else
             {
@@ -50,7 +50,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     if(!string.IsNullOrEmpty(content.Text))
                     {
                         message.Speak = content.Text;
-                        isQuestion = content.Text.EndsWith("?");
+                        isQuestion = content.Text.Trim().EndsWith("?");
                     }
                 }
             }
