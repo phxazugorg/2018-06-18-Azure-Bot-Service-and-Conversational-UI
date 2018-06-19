@@ -70,5 +70,21 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             await context.PostAsync(promptMessage);
             return prompt;
         }
+
+        private static async Task GenerateHeroCardConfirmMessage(IMessageActivity confirmation, RideReservation state)
+        {
+            List<CardImage> cardImages = new List<CardImage>();
+            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.Origin};64;1&wp.1={state.Destination};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
+
+            HeroCard confirmCard = new HeroCard()
+            {
+                Title = $"Trip Summary",
+                Subtitle = $"",
+                Images = cardImages
+            };
+
+            Attachment confirmAttachment = confirmCard.ToAttachment();
+            confirmation.Attachments.Add(confirmAttachment);
+        }
     }
 }

@@ -25,10 +25,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 {
                     message.InputHint = InputHints.ExpectingInput;
                 }
+                else
+                {
+                    message.InputHint = InputHints.AcceptingInput;
+                }
             }
-
-            // TEST
-            message.Text += $" - [Channel: {message.ChannelId}, Speech Support: {channelCapability.SupportsSpeak()}]";
 
             return message;
         }

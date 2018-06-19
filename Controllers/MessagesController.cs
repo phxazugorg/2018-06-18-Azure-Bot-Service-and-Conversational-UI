@@ -91,6 +91,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         {
             using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, message))
             {
+                // only set the speak if it suports it.
+                var channelCapability = new ChannelCapability(Address.FromActivity(message));
                 var reply = message.CreateReply();
 
                 var client = scope.Resolve<IConnectorClient>();
@@ -103,6 +105,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 {
                     // if an error occured add the error text as the message
                     reply.Text = e.Message;
+                }
+                if (channelCapability.SupportsSpeak())
+                {
+                    reply.Speak = reply.Text;
+                    reply.InputHint = InputHints.ExpectingInput;
                 }
                 await client.Conversations.ReplyToActivityAsync(reply);
             }
