@@ -54,19 +54,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             }
             if (field.Name.ToLower().StartsWith("confirmation"))
             {
-                //List<CardImage> cardImages = new List<CardImage>();
-                //cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.Origin};64;1&wp.1={state.Destination};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
-
-                //HeroCard confirmCard = new HeroCard()
-                //{
-                //    Title = $"Trip Summary",
-                //    Subtitle = $"",
-                //    Images = cardImages
-                //};
-
-                //Attachment confirmAttachment = confirmCard.ToAttachment();
-                //promptMessage.Attachments.Add(confirmAttachment);
-
                 await GenerateHeroCardConfirmMessage(promptMessage, state);
             }
             await context.PostAsync(promptMessage);
@@ -76,7 +63,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         private static async Task GenerateHeroCardConfirmMessage(IMessageActivity confirmation, RideReservation state)
         {
             List<CardImage> cardImages = new List<CardImage>();
-            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.Origin};64;1&wp.1={state.Destination};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
+            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,300&wp.0={state.Origin};64;1&wp.1={state.Destination};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
 
             HeroCard confirmCard = new HeroCard()
             {
@@ -92,7 +79,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         private static async Task GenerateReceiptCardConfirmMessage(IMessageActivity confirmation, RideReservation state)
         {
             List<CardImage> cardImages = new List<CardImage>();
-            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.Origin};64;1&wp.1={state.Destination};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
+            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,300&wp.0={state.Origin};64;1&wp.1={state.Destination};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
 
             HeroCard confirmCard = new HeroCard()
             {
