@@ -22,7 +22,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
     {
         [Prompt("Where you want the ride to pick you up?")]
         public string PickUpLocation { get; set; }
-        [Prompt("Where is you want to go?")]
+        [Prompt("Where you want to go?")]
         public string DropLocation { get; set; }
         [Prompt("What time do you want your ride to arrive?")]
         [Optional]
@@ -98,6 +98,24 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
 
             Attachment confirmAttachment = confirmCard.ToAttachment();
             confirmation.Attachments.Add(confirmAttachment);
+            return Task.CompletedTask;
+        }
+
+        public static Task GenerateHeroCardNotificationMessage(IMessageActivity message, RideReservation state)
+        {
+            List<CardImage> cardImages = new List<CardImage>();
+            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.PickUpLocation};64;1&wp.1={state.DropLocation};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
+
+            HeroCard confirmCard = new HeroCard()
+            {
+                Title = $"Taxi Bot Notification",
+                Subtitle = $"Driver arrived",
+                Images = cardImages,
+                Text = "Please meet the taxi at the pickup location."
+            };
+
+            Attachment confirmAttachment = confirmCard.ToAttachment();
+            message.Attachments.Add(confirmAttachment);
             return Task.CompletedTask;
         }
     }

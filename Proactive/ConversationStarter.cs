@@ -40,8 +40,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             message.From = botAccount;
             message.Recipient = userAccount;
             message.Conversation = new ConversationAccount(id: conversationId);
-            message.Text = "Hello, your driver has arrived.";
             message.Locale = "en-Us";
+            await RideReservation.GenerateHeroCardNotificationMessage(message, reservation);
             await connector.Conversations.SendToConversationAsync((Activity)message);
         }
     }
