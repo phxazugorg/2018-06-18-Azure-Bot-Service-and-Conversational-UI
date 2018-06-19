@@ -40,7 +40,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 .Field(nameof(PickupTime))
                 .Field(nameof(VehicleType))
                 .AddRemainingFields()            
-                .Confirm("Ready to submit your reservation? Here are your trip details: {*}")
+                .Confirm("Ready to submit your reservation? {*}")
                 .Build();
         }
 
@@ -68,11 +68,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             confirmation.Text = messageText;
 
             List<CardImage> cardImages = new List<CardImage>();
-            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,300&wp.0={state.Origin};64;1&wp.1={state.Destination};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
+            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.Origin};64;1&wp.1={state.Destination};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
 
             HeroCard confirmCard = new HeroCard()
             {
-                Title = $"",
+                Title = $"Trip Details",
                 Subtitle = $"",
                 Images = cardImages,
                 Text = cardText
@@ -85,7 +85,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         private static async Task GenerateReceiptCardConfirmMessage(IMessageActivity confirmation, RideReservation state)
         {
             List<CardImage> cardImages = new List<CardImage>();
-            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,300&wp.0={state.Origin};64;1&wp.1={state.Destination};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
+            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.Origin};64;1&wp.1={state.Destination};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
 
             HeroCard confirmCard = new HeroCard()
             {

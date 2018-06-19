@@ -17,11 +17,10 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
 
             if (channelCapability.SupportsSpeak() && string.IsNullOrEmpty(message.Speak))
             {
-                SetSpeech(message);
+                var isQuestion = SetSpeech(message);
 
                 // set InputHint to ExpectingInput if text is a question
-                var isQuestion = message.Text?.EndsWith("?");
-                if (isQuestion.GetValueOrDefault())
+                if (isQuestion)
                 {
                     message.InputHint = InputHints.ExpectingInput;
                 }
@@ -34,11 +33,13 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             return message;
         }
 
-        private void SetSpeech(IMessageActivity message)
+        private bool SetSpeech(IMessageActivity message)
         {
-            if(!string.IsNullOrEmpty(message.Text))
+            var isQuestion = false;
+            if (!string.IsNullOrEmpty(message.Text))
             {
                 message.Speak = message.Text;
+                isQuestion = message.Text.EndsWith("?");
             }
             else
             {
@@ -49,9 +50,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     if(!string.IsNullOrEmpty(content.Text))
                     {
                         message.Speak = content.Text;
+                        isQuestion = content.Text.EndsWith("?");
                     }
                 }
             }
+            return isQuestion;
         }
     }
 }
