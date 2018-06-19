@@ -50,7 +50,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 var ReservationResult = await result;
                 await context.PostAsync("Thank you!");
             }
-            catch (FormCanceledException<SurveyForm> e)
+            catch (FormCanceledException<RideReservation> e)
             {
                 string reply;
                 if (e.InnerException == null)

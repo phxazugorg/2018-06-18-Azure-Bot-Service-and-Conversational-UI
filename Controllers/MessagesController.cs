@@ -27,9 +27,17 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         public virtual async Task<HttpResponseMessage> Post([FromBody] Activity activity)
         {
             // check if activity is of type message
-            if (activity != null && activity.GetActivityType() == ActivityTypes.Message && !string.IsNullOrEmpty(activity.Text))
+            if (activity != null && activity.GetActivityType() == ActivityTypes.Message)
             {
-                await Conversation.SendAsync(activity, () => new EchoDialog());
+                // this is to handle Cortana empty invocations(Text property is empty and no conversation update is sent)
+                if (string.IsNullOrEmpty(activity.Text))
+                {
+                    await SendGreetingMessage(activity);
+                }
+                else
+                {
+                    await Conversation.SendAsync(activity, () => new EchoDialog());
+                }
             }
             else
             {
@@ -51,30 +59,15 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
                 // Not available in all channels
                 IConversationUpdateActivity update = message;
-                using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, message))
+                if (update.MembersAdded.Any())
                 {
-                    var client = scope.Resolve<IConnectorClient>();
-                    if (update.MembersAdded.Any())
+                    foreach (var newMember in update.MembersAdded)
                     {
-                        var reply = message.CreateReply();
-                        foreach (var newMember in update.MembersAdded)
+                        // the bot is always added as a user of the conversation, since we don't
+                        // want to display the message twice ignore the conversation update triggered by the bot
+                        if (newMember.Id == message.Recipient.Id)
                         {
-                            // the bot is always added as a user of the conversation, since we don't
-                            // want to display the message twice ignore the conversation update triggered by the bot
-                            if (newMember.Id == message.Recipient.Id)
-                            {
-                                try
-                                {
-                                    // send a welcome message to the user
-                                    reply.Text = "Welcome to the Taxi Reservation Bot! Type Help at anytime to see what I can do for you.";
-                                }
-                                catch (Exception e)
-                                {
-                                    // if an error occured add the error text as the message
-                                    reply.Text = e.Message;
-                                }
-                                await client.Conversations.ReplyToActivityAsync(reply);
-                            }
+                            await SendGreetingMessage(message);
                         }
                     }
                 }
@@ -90,6 +83,28 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             }
             else if (message.Type == ActivityTypes.Ping)
             {
+            }
+        }
+
+        // greeting message
+        private async Task SendGreetingMessage(Activity message)
+        {
+            using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, message))
+            {
+                var reply = message.CreateReply();
+
+                var client = scope.Resolve<IConnectorClient>();
+                try
+                {
+                    // send a welcome message to the user
+                    reply.Text = "Welcome to the Taxi Reservation Bot! I can answer questions about our service and schedule ride reservations.";
+                }
+                catch (Exception e)
+                {
+                    // if an error occured add the error text as the message
+                    reply.Text = e.Message;
+                }
+                await client.Conversations.ReplyToActivityAsync(reply);
             }
         }
     }

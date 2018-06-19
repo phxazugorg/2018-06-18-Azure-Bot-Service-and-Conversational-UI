@@ -34,7 +34,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         public static IForm<RideReservation> BuildForm()
         {
             return new FormBuilder<RideReservation>()
-                .Prompter(myPrompter)
+                .Prompter(MyPrompter)
                 .Field(nameof(Origin))
                 .Field(nameof(Destination))
                 .Field(nameof(PickupTime))
@@ -44,7 +44,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 .Build();
         }
 
-        private static async Task<FormPrompt> myPrompter(IDialogContext context, FormPrompt prompt, RideReservation state, IField<RideReservation> field)
+        private static async Task<FormPrompt> MyPrompter(IDialogContext context, FormPrompt prompt, RideReservation state, IField<RideReservation> field)
         {
             var preamble = context.MakeMessage();
             var promptMessage = context.MakeMessage();
@@ -62,7 +62,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     Title = $"Trip Summary",
                     Subtitle = $"",
                     Images = cardImages
-                    //Buttons = cardButtons
                 };
 
                 Attachment confirmAttachment = confirmCard.ToAttachment();

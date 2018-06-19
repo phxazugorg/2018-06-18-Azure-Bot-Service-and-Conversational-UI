@@ -175,7 +175,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\EchoDialog.cs" />
-    <Compile Include="Dialogs\SurveyForm.cs" />
     <Compile Include="Forms\RideReservation.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
