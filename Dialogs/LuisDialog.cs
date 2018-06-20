@@ -33,19 +33,20 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         [LuisIntent("RideReservation")]
         public async Task ReserveRide(IDialogContext context, IAwaitable<IMessageActivity> activity, LuisResult result)
         {
-            await InjectLocationIfNecessary(activity, result);
-            var reservation = new FormDialog<RideReservation>(new RideReservation(), RideReservation.BuildForm, FormOptions.PromptInStart, result.Entities);
+            var entities = await InjectLocationIfNecessary(activity, result);
+            var reservation = new FormDialog<RideReservation>(new RideReservation(), RideReservation.BuildForm, FormOptions.PromptInStart, entities);
             context.Call<RideReservation>(reservation, ResumeAfterReservation);
         }
 
-        private async Task InjectLocationIfNecessary(IAwaitable<IMessageActivity> activity, LuisResult result)
+        private async Task<IList<EntityRecommendation>> InjectLocationIfNecessary(IAwaitable<IMessageActivity> activity, LuisResult result)
         {
+            var entities = result.Entities.ToList();
             // inject location from Cortana if necessary
             var message = await activity;
             var userInfo = message.Entities.FirstOrDefault(e => e.Type.Equals("UserInfo"));
             if (userInfo != null)
             {
-                var currentLocation = userInfo.Properties["CurrentLocation"];
+                var currentLocation = userInfo.Properties["current_location"];
 
                 if (currentLocation != null)
                 {
@@ -55,14 +56,16 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                     var lon = hub.Value<double>("Longitude");
                     var address = hub.Value<string>("address");
 
-                    if(!result.Entities.Any(e => e.Type.Equals("PickUpLocation")))
+                    if(!entities.Any(e => e.Type.Equals("PickUpLocation")))
                     {
-                        var pickupEntity = new EntityRecommendation("PickUpLocation");
+                        var pickupEntity = new EntityRecommendation("PickUpLocation", score: 1.0);
                         pickupEntity.Entity = !string.IsNullOrEmpty(address) ? address : $"{lat},{lon}";
-                        result.Entities.Add(pickupEntity);
+                        entities.Add(pickupEntity);
                     }
                 }
             }
+
+            return entities;
         }
 
         private async Task ResumeAfterReservation(IDialogContext context, IAwaitable<RideReservation> result)
