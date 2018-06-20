@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Bot.Builder.Dialogs;
@@ -62,10 +63,19 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
 
         private static Task GenerateHeroCardConfirmMessage(IMessageActivity confirmation, RideReservation state)
         {
+            Regex geoCoordinateRegex = new Regex(@"(-?\d+.?\d+),(-?\d+.?\d+)", RegexOptions.IgnoreCase);
+
             var messageText = "Ready to submit your reservation?";
             var cardText = confirmation.Text.Replace(messageText, "").Trim();
 
             confirmation.Text = messageText;
+
+            // check if pickup location is lat,lon  
+            if(geoCoordinateRegex.IsMatch(state.PickUpLocation))
+            {
+                // replace coordinates with verbiage
+                cardText = cardText.Replace(state.PickUpLocation, "Your current location");
+            }
 
             List<CardImage> cardImages = new List<CardImage>();
             cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.PickUpLocation};64;1&wp.1={state.DropLocation};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
@@ -76,24 +86,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 Subtitle = $"",
                 Images = cardImages,
                 Text = cardText
-            };
-
-            Attachment confirmAttachment = confirmCard.ToAttachment();
-            confirmation.Attachments.Add(confirmAttachment);
-            return Task.CompletedTask;
-        }
-
-        private static Task GenerateReceiptCardConfirmMessage(IMessageActivity confirmation, RideReservation state)
-        {
-            List<CardImage> cardImages = new List<CardImage>();
-            cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.PickUpLocation};64;1&wp.1={state.DropLocation};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
-
-            HeroCard confirmCard = new HeroCard()
-            {
-                Title = $"Trip Summary",
-                Subtitle = $"",
-                Images = cardImages,
-                Text = confirmation.Text
             };
 
             Attachment confirmAttachment = confirmCard.ToAttachment();
