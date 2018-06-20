@@ -41,7 +41,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             message.Recipient = userAccount;
             message.Conversation = new ConversationAccount(id: conversationId);
             message.Locale = "en-Us";
-            await RideReservation.GenerateHeroCardNotificationMessage(message, reservation);
+            await RideReservation.GenerateAdaptiveCardNotificationMessage(message, reservation);
             await connector.Conversations.SendToConversationAsync((Activity)message);
         }
     }

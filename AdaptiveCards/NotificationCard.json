@@ -1,0 +1,119 @@
+﻿{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.0",
+  "hideOriginalBody": true,
+  "body": [
+    {
+      "type": "Container",
+      "items": [
+        {
+          "type": "ColumnSet",
+          "columns": [
+            {
+              "type": "Column",
+              "width": "auto",
+              "items": [
+                {
+                  "type": "Image",
+                  "url": "https://vpbotlabssa.blob.core.windows.net/public-images/taxi-icon.png",
+                  "size": "small",
+                  "style": "person"
+                }
+              ]
+            },
+            {
+              "type": "Column",
+              "width": "stretch",
+              "items": [
+                {
+                  "type": "TextBlock",
+                  "text": "Taxi Bot Notification",
+                  "weight": "bolder",
+                  "size": "large"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tripImage",
+          "type": "Image",
+          "url": "<TRIPURL>"
+        },
+        {
+          "type": "TextBlock",
+          "text": "Driver arived",
+          "weight": "bolder",
+          "size": "large",
+          "color": "accent"
+        },
+        {
+          "type": "ColumnSet",
+          "columns": [
+            {
+              "type": "Column",
+              "width": "auto",
+              "items": [
+                {
+                  "type": "Image",
+                  "url": "https://vpbotlabssa.blob.core.windows.net/public-images/ricky.jpg",
+                  "size": "medium",
+                  "style": "person"
+                }
+              ]
+            },
+            {
+              "type": "Column",
+              "width": "stretch",
+              "items": [
+                {
+                  "type": "TextBlock",
+                  "text": "Ricky Jimenez",
+                  "weight": "bolder",
+                  "wrap": true
+                },
+                {
+                  "type": "TextBlock",
+                  "spacing": "none",
+                  "text": "Lic. # 3334567",
+                  "isSubtle": true,
+                  "wrap": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "Please meet the taxi at the pickup location.",
+          "wrap": true
+        },
+        {
+          "type": "FactSet",
+          "facts": [
+            {
+              "title": "Car Model:",
+              "value": "Toyota Prius"
+            },
+            {
+              "title": "Color:",
+              "value": "White"
+            },
+            {
+              "title": "Plate #:",
+              "value": "eljodon"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "actions": [
+  ]
+}

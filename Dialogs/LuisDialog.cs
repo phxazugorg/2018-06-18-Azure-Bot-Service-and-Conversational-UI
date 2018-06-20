@@ -33,14 +33,15 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         [LuisIntent("RideReservation")]
         public async Task ReserveRide(IDialogContext context, IAwaitable<IMessageActivity> activity, LuisResult result)
         {
-            var entities = await InjectLocationIfNecessary(activity, result);
+            var entities = await PreProcessEntities(activity, result);
             var reservation = new FormDialog<RideReservation>(new RideReservation(), RideReservation.BuildForm, FormOptions.PromptInStart, entities);
             context.Call<RideReservation>(reservation, ResumeAfterReservation);
         }
 
-        private async Task<IList<EntityRecommendation>> InjectLocationIfNecessary(IAwaitable<IMessageActivity> activity, LuisResult result)
+        private async Task<IList<EntityRecommendation>> PreProcessEntities(IAwaitable<IMessageActivity> activity, LuisResult result)
         {
             var entities = result.Entities.ToList();
+
             // inject location from Cortana if necessary
             var message = await activity;
             var userInfo = message.Entities.FirstOrDefault(e => e.Type.Equals("UserInfo"));
@@ -63,6 +64,13 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                         entities.Add(pickupEntity);
                     }
                 }
+            }
+
+            // rename the pickup time
+            var pickUpTimeEntity = entities.FirstOrDefault(e => e.Type.StartsWith("builtin.datetimeV2"));
+            if (pickUpTimeEntity != null)
+            {
+                pickUpTimeEntity.Type = "PickupTime";
             }
 
             return entities;

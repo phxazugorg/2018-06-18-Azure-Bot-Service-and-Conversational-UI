@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using AdaptiveCards;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Builder.FormFlow.Advanced;
 using Microsoft.Bot.Connector;
+using Newtonsoft.Json;
 
 namespace Microsoft.Bot.Sample.SimpleEchoBot
 {
@@ -108,6 +112,36 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
 
             Attachment confirmAttachment = confirmCard.ToAttachment();
             message.Attachments.Add(confirmAttachment);
+            return Task.CompletedTask;
+        }
+
+        public static Task GenerateAdaptiveCardNotificationMessage(IMessageActivity message, RideReservation state)
+        {
+            try
+            {
+                var tripImageUrl = $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.PickUpLocation};64;1&wp.1={state.DropLocation};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl";
+
+                // read the json in from our file
+                WebClient client = new WebClient();
+                Stream stream = client.OpenRead("https://vpbotlabssa.blob.core.windows.net/public-images/NotificationCard.json");
+                StreamReader reader = new StreamReader(stream);
+                string json = reader.ReadToEnd();
+                // replace the trip url
+                json = json.Replace("<TRIPURL>", tripImageUrl);
+                // use Newtonsofts JsonConvert to deserialized the json into a C# AdaptiveCard object
+                AdaptiveCard card = JsonConvert.DeserializeObject<AdaptiveCard>(json);                
+                // put the adaptive card as an attachment to the reply message
+                message.Attachments.Add(new Attachment
+                {
+                    ContentType = AdaptiveCard.ContentType,
+                    Content = card
+                });
+            }
+            catch (Exception e)
+            {
+                // if an error occured add the error text as the message
+                message.Text = e.Message;
+            }
             return Task.CompletedTask;
         }
     }
