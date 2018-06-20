@@ -18,7 +18,7 @@
                   "type": "Image",
                   "url": "https://vpbotlabssa.blob.core.windows.net/public-images/taxi-icon.png",
                   "size": "small",
-                  "style": "person"
+                  "horizontalAlignment": "left"
                 }
               ]
             },
@@ -29,8 +29,9 @@
                 {
                   "type": "TextBlock",
                   "text": "Taxi Bot Notification",
+                  "size": "extraLarge",
                   "weight": "bolder",
-                  "size": "large"
+                  "horizontalAlignment": "left"
                 }
               ]
             }
@@ -39,7 +40,8 @@
         {
           "id": "tripImage",
           "type": "Image",
-          "url": "<TRIPURL>"
+          "url": "<TRIPURL>",
+          "size": "stretch"
         },
         {
           "type": "TextBlock",
@@ -50,6 +52,7 @@
         },
         {
           "type": "ColumnSet",
+          "spacing": "none",
           "columns": [
             {
               "type": "Column",
@@ -71,14 +74,16 @@
                   "type": "TextBlock",
                   "text": "Ricky Jimenez",
                   "weight": "bolder",
-                  "wrap": true
+                  "wrap": true,
+                  "horizontalAlignment": "left"
                 },
                 {
                   "type": "TextBlock",
                   "spacing": "none",
                   "text": "Lic. # 3334567",
                   "isSubtle": true,
-                  "wrap": true
+                  "wrap": true,
+                  "horizontalAlignment": "left"
                 }
               ]
             }
