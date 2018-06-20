@@ -31,11 +31,38 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
 
 
         [LuisIntent("RideReservation")]
-        public Task ReserveRide(IDialogContext context, IAwaitable<IMessageActivity> activity, LuisResult result)
+        public async Task ReserveRide(IDialogContext context, IAwaitable<IMessageActivity> activity, LuisResult result)
         {
+            await InjectLocationIfNecessary(activity, result);
             var reservation = new FormDialog<RideReservation>(new RideReservation(), RideReservation.BuildForm, FormOptions.PromptInStart, result.Entities);
             context.Call<RideReservation>(reservation, ResumeAfterReservation);
-            return Task.CompletedTask;
+        }
+
+        private async Task InjectLocationIfNecessary(IAwaitable<IMessageActivity> activity, LuisResult result)
+        {
+            // inject location from Cortana if necessary
+            var message = await activity;
+            var userInfo = message.Entities.FirstOrDefault(e => e.Type.Equals("UserInfo"));
+            if (userInfo != null)
+            {
+                var currentLocation = userInfo.Properties["CurrentLocation"];
+
+                if (currentLocation != null)
+                {
+                    var hub = currentLocation["Hub"];
+
+                    var lat = hub.Value<double>("Latitude");
+                    var lon = hub.Value<double>("Longitude");
+                    var address = hub.Value<string>("address");
+
+                    if(!result.Entities.Any(e => e.Type.Equals("PickUpLocation")))
+                    {
+                        var pickupEntity = new EntityRecommendation("PickUpLocation");
+                        pickupEntity.Entity = !string.IsNullOrEmpty(address) ? address : $"{lat},{lon}";
+                        result.Entities.Add(pickupEntity);
+                    }
+                }
+            }
         }
 
         private async Task ResumeAfterReservation(IDialogContext context, IAwaitable<RideReservation> result)
