@@ -1,0 +1,119 @@
+{
+	"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+	"type": "AdaptiveCard",
+	"version": "1.0",
+    "hideOriginalBody": true,
+	"body": [
+		{
+			"type": "Container",
+			"items": [
+                    {
+                    "type": "ColumnSet",
+                    "columns": [
+                        {
+                            "type": "Column",
+                            "width": "10",
+                            "items": [
+                                {
+                                "type": "Image",
+                                "url": "https://vpbotlabssa.blob.core.windows.net/public-images/taxi-icon.png",
+                                "size": "small",
+                                "style": "person"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Column",
+                            "width": "90",
+                            "items": [
+                                {
+                                    "type": "TextBlock",
+					                "text": "Taxi Bot Notification",
+					                "weight": "bolder",
+					                "size": "large"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "tripImage",
+					"type": "Image",
+					"url": "https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0=mesa%20az;64;1&wp.1=chandler%20az;66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"
+				},
+                {
+					"type": "TextBlock",
+					"text": "Driver arived",
+                    "weight": "bolder",
+					"size": "large",
+                    "color": "accent"
+				},
+				{
+					"type": "ColumnSet",
+					"columns": [
+						{
+							"type": "Column",
+							"width": "auto",
+							"items": [
+								{
+									"type": "Image",
+									"url": "https://vpbotlabssa.blob.core.windows.net/public-images/ricky.jpg",
+									"size": "medium",
+									"style": "person"
+								}
+							]
+						},
+						{
+							"type": "Column",
+							"width": "stretch",
+							"items": [
+								{
+									"type": "TextBlock",
+									"text": "Ricky Jimenez",
+									"weight": "bolder",
+									"wrap": true
+								},
+								{
+									"type": "TextBlock",
+									"spacing": "none",
+									"text": "Lic. # 3334567",
+									"isSubtle": true,
+									"wrap": true
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Container",
+			"items": [
+				{
+					"type": "TextBlock",
+					"text": "Please meet the taxi at the pickup location.",
+					"wrap": true
+				},
+				{
+					"type": "FactSet",
+					"facts": [
+						{
+							"title": "Car Model:",
+							"value": "Toyota Prius"
+						},
+						{
+							"title": "Color:",
+							"value": "White"
+						},
+						{
+							"title": "Plate #:",
+							"value": "eljodon"
+						}
+					]
+				}
+			]
+		}
+	],
+	"actions": [
+	]
+}
