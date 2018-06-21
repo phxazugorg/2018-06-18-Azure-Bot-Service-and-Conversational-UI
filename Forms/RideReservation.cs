@@ -123,7 +123,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
 
                 // read the json in from our file
                 WebClient client = new WebClient();
-                Stream stream = client.OpenRead("https://vpbotlabssa.blob.core.windows.net/public-images/NotificationCard.json");
+                Stream stream = client.OpenRead("https://vpbotlabssa.blob.core.windows.net/adaptive-cards/NotificationCard.json");
                 StreamReader reader = new StreamReader(stream);
                 string json = reader.ReadToEnd();
                 // replace the trip url
