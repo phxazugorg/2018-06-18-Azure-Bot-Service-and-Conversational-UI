@@ -42,8 +42,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             message.Conversation = new ConversationAccount(id: conversationId);
             message.Locale = "en-Us";
             message.Text = "Driver Arrived Notification";
-            await RideReservation.GenerateHeroCardNotificationMessage(message, reservation);
-            //await RideReservation.GenerateAdaptiveCardNotificationMessage(message, reservation);
+            //await RideReservation.GenerateHeroCardNotificationMessage(message, reservation);
+            await RideReservation.GenerateAdaptiveCardNotificationMessage(message, reservation);
             await connector.Conversations.SendToConversationAsync((Activity)message);
         }
     }
