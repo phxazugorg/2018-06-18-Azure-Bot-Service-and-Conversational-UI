@@ -113,8 +113,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             ConversationStarter.reservation = reservation;
 
             //We create a timer to simulate some background process or trigger
-            t = new Timer(new TimerCallback(TimerEvent));
-            t.Change(15000, Timeout.Infinite);
+            //t = new Timer(new TimerCallback(TimerEvent));
+            //t.Change(15000, Timeout.Infinite);
         }
 
         private void TimerEvent(object state)

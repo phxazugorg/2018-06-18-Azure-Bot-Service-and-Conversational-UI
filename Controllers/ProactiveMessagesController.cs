@@ -11,7 +11,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
     public class ProactiveMessagesController : ApiController
     {
         [HttpGet]
-
         [Route("api/proactivemessage")]
         public async Task<HttpResponseMessage> SendMessage()
         {
