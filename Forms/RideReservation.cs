@@ -40,7 +40,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         public static IForm<RideReservation> BuildForm()
         {
             return new FormBuilder<RideReservation>()
-                //.Prompter(MyPrompter)
+                .Prompter(MyPrompter)
                 .Field(nameof(PickUpLocation))
                 .Field(nameof(DropLocation))
                 .Field(nameof(PickupTime))
