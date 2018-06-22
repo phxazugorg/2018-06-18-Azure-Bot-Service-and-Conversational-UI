@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using AdaptiveCards;
+//using AdaptiveCards;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Builder.FormFlow.Advanced;
@@ -19,7 +20,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
     {
         Compact,
         Sedan,
-        Limousine
+        Limo
     }
 
     [Serializable]
@@ -39,7 +40,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         public static IForm<RideReservation> BuildForm()
         {
             return new FormBuilder<RideReservation>()
-                .Prompter(MyPrompter)
+                //.Prompter(MyPrompter)
                 .Field(nameof(PickUpLocation))
                 .Field(nameof(DropLocation))
                 .Field(nameof(PickupTime))
@@ -49,6 +50,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 .Build();
         }
 
+        #region customizations
         private static async Task<FormPrompt> MyPrompter(IDialogContext context, FormPrompt prompt, RideReservation state, IField<RideReservation> field)
         {
             var preamble = context.MakeMessage();
@@ -129,7 +131,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 // replace the trip url
                 json = json.Replace("<TRIPURL>", tripImageUrl);
                 // use Newtonsofts JsonConvert to deserialized the json into a C# AdaptiveCard object
-                AdaptiveCard card = JsonConvert.DeserializeObject<AdaptiveCard>(json);                
+                AdaptiveCard card = JsonConvert.DeserializeObject<AdaptiveCard>(json);
                 // put the adaptive card as an attachment to the reply message
                 message.Attachments.Add(new Attachment
                 {
@@ -144,5 +146,6 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             }
             return Task.CompletedTask;
         }
+        #endregion
     }
 }

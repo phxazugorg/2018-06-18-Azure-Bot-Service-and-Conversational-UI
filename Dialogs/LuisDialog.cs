@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Microsoft.Bot.Sample.SimpleEchoBot
 {
-    [LuisModel("4954d9d0-e747-4f94-a5ea-a5112d9d1054", "f06612b74bb744c6b0b0a0f3e153be74")]
+    [LuisModel("22acfa00-8262-4609-8f7b-a42bcee5a905", "f06612b74bb744c6b0b0a0f3e153be74")]
     [Serializable]
     public class LuisDialog : LuisDialog<object>
     {
@@ -22,13 +22,43 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         [LuisIntent("None")]
         public async Task None(IDialogContext context, LuisResult result)
         {
-            string message = $"Sorry, I did not understand '{result.Query}'. Type 'help' if you need assistance.";
+            await context.Forward(new FaqDialog(), ResumeAfterFAQ, context.Activity, CancellationToken.None);
+        }
+        private Task ResumeAfterFAQ(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            context.Wait(this.MessageReceived);
+            return Task.CompletedTask;
+        }
+
+        [LuisIntent("Greeting")]
+        public async Task Greeting(IDialogContext context, LuisResult result)
+        {
+            string message = $"Hello!";
 
             await context.PostAsync(message);
 
             context.Wait(this.MessageReceived);
         }
 
+        [LuisIntent("InquireGreeting")]
+        public async Task InquireGreeting(IDialogContext context, LuisResult result)
+        {
+            string message = $"I am doing great, thank you!";
+
+            await context.PostAsync(message);
+
+            context.Wait(this.MessageReceived);
+        }
+
+        [LuisIntent("Help")]
+        public async Task Help(IDialogContext context, LuisResult result)
+        {
+            string message = $"I can help you with questions about our service and schedule ride reservations.";
+
+            await context.PostAsync(message);
+
+            context.Wait(this.MessageReceived);
+        }
 
         [LuisIntent("RideReservation")]
         public async Task ReserveRide(IDialogContext context, IAwaitable<IMessageActivity> activity, LuisResult result)
@@ -81,7 +111,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             try
             {
                 var reservation = await result;
-                SetTimer(context.Activity.AsMessageActivity(), reservation);
+                SaveReservation(context.Activity.AsMessageActivity(), reservation);
+                //SetTimer(context.Activity.AsMessageActivity(), reservation);
                 await context.PostAsync("Thank you for your reservation! You will receive a notification when the driver arrives.");
             }
             catch (FormCanceledException<RideReservation> e)
@@ -100,7 +131,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             context.Wait(this.MessageReceived);
         }
 
-        private void SetTimer(IMessageActivity message, RideReservation reservation)
+        #region proactive messages
+        private void SaveReservation(IMessageActivity message, RideReservation reservation)
         {
             //We need to keep this data so we know who to send the message to. Assume this would be stored somewhere, e.g. an Azure Table
             ConversationStarter.toId = message.From.Id;
@@ -111,16 +143,30 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             ConversationStarter.channelId = message.ChannelId;
             ConversationStarter.conversationId = message.Conversation.Id;
             ConversationStarter.reservation = reservation;
-
-            //We create a timer to simulate some background process or trigger
-            //t = new Timer(new TimerCallback(TimerEvent));
-            //t.Change(15000, Timeout.Infinite);
         }
 
-        private void TimerEvent(object state)
-        {
-            t.Dispose();
-            ConversationStarter.Resume(ConversationStarter.conversationId, ConversationStarter.channelId); //We don't need to wait for this, just want to start the interruption here
-        }
+        //private void SetTimer(IMessageActivity message, RideReservation reservation)
+        //{
+        //    //We need to keep this data so we know who to send the message to. Assume this would be stored somewhere, e.g. an Azure Table
+        //    ConversationStarter.toId = message.From.Id;
+        //    ConversationStarter.toName = message.From.Name;
+        //    ConversationStarter.fromId = message.Recipient.Id;
+        //    ConversationStarter.fromName = message.Recipient.Name;
+        //    ConversationStarter.serviceUrl = message.ServiceUrl;
+        //    ConversationStarter.channelId = message.ChannelId;
+        //    ConversationStarter.conversationId = message.Conversation.Id;
+        //    ConversationStarter.reservation = reservation;
+
+        //    //We create a timer to simulate some background process or trigger
+        //    t = new Timer(new TimerCallback(TimerEvent));
+        //    t.Change(15000, Timeout.Infinite);
+        //}
+
+        //private void TimerEvent(object state)
+        //{
+        //    t.Dispose();
+        //    ConversationStarter.Resume(ConversationStarter.conversationId, ConversationStarter.channelId); //We don't need to wait for this, just want to start the interruption here
+        //}
+        #endregion
     }
 }

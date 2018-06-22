@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Bot.Connector;
@@ -13,35 +14,30 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
     {
         protected int count = 1;
 
-        public Task StartAsync(IDialogContext context)
+        public async Task StartAsync(IDialogContext context)
         {
             context.Wait(MessageReceivedAsync);
-            return Task.CompletedTask;
         }
 
         public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var message = await argument;
 
-            if (message.Text == "reset")
-            {
-                PromptDialog.Confirm(
-                    context,
-                    AfterResetAsync,
-                    "Are you sure you want to reset the count?",
-                    "Didn't get that!",
-                    promptStyle: PromptStyle.Auto);
-            }
-            else if (message.Text.ToLower() == "ride")
+            if (message.Text.ToLower().StartsWith("reserve"))
             {
                 var reservation = new FormDialog<RideReservation>(new RideReservation(), RideReservation.BuildForm, FormOptions.PromptInStart, null);
                 context.Call<RideReservation>(reservation, ResumeAfterReservation);
             }
             else
             {
-                await context.PostAsync($"{this.count++}: You said {message.Text}");
-                context.Wait(MessageReceivedAsync);
+                await context.Forward(new FaqDialog(), ResumeAfterFAQ, message, CancellationToken.None);
             }
+        }
+
+        private Task ResumeAfterFAQ(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            context.Wait(MessageReceivedAsync);
+            return Task.CompletedTask;
         }
 
         private async Task ResumeAfterReservation(IDialogContext context, IAwaitable<RideReservation> result)
@@ -66,21 +62,5 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             }
             context.Wait(MessageReceivedAsync);
         }
-
-        public async Task AfterResetAsync(IDialogContext context, IAwaitable<bool> argument)
-        {
-            var confirm = await argument;
-            if (confirm)
-            {
-                this.count = 1;
-                await context.PostAsync("Reset count.");
-            }
-            else
-            {
-                await context.PostAsync("Did not reset count.");
-            }
-            context.Wait(MessageReceivedAsync);
-        }
-
     }
 }

@@ -37,6 +37,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
                 else
                 {
                     //await Conversation.SendAsync(activity, () => new EchoDialog());
+                    //await Conversation.SendAsync(activity, () => new FaqDialog());
                     await Conversation.SendAsync(activity, () => new LuisDialog());
                 }
             }
