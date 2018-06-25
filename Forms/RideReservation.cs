@@ -99,21 +99,21 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             return Task.CompletedTask;
         }
 
-        public static Task GenerateHeroCardNotificationMessage(IMessageActivity message, RideReservation state)
+        public static Task GenerateHeroCardNotificationMessage(IMessageActivity message, RideReservation state, string subTitle, string text)
         {
             List<CardImage> cardImages = new List<CardImage>();
             cardImages.Add(new CardImage(url: $"https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/Routes?mapSize=400,200&wp.0={state.PickUpLocation};64;1&wp.1={state.DropLocation};66;2&key=An5x3zGAXYxr6cTaSvbsWilLxUBA75GoOXM3KndDNtQMn2ZAKRGjgnZw2XLMJYtl"));
 
-            HeroCard confirmCard = new HeroCard()
+            HeroCard notificationCard = new HeroCard()
             {
                 Title = $"Taxi Bot Notification",
-                Subtitle = $"Driver arrived",
+                Subtitle = subTitle,
                 Images = cardImages,
-                Text = "Please meet the taxi at the pickup location."
+                Text = text
             };
 
-            Attachment confirmAttachment = confirmCard.ToAttachment();
-            message.Attachments.Add(confirmAttachment);
+            Attachment notificationAttachment = notificationCard.ToAttachment();
+            message.Attachments.Add(notificationAttachment);
             return Task.CompletedTask;
         }
 

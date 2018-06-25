@@ -42,8 +42,33 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             message.Conversation = new ConversationAccount(id: conversationId);
             message.Locale = "en-Us";
             message.Text = "Driver Arrived Notification";
-            //await RideReservation.GenerateHeroCardNotificationMessage(message, reservation);
             await RideReservation.GenerateAdaptiveCardNotificationMessage(message, reservation);
+            await connector.Conversations.SendToConversationAsync((Activity)message);
+        }
+
+        //This will send an adhoc message to the user
+        public static async Task Cancel(string conversationId, string channelId)
+        {
+            var userAccount = new ChannelAccount(toId, toName);
+            var botAccount = new ChannelAccount(fromId, fromName);
+            var connector = new ConnectorClient(new Uri(serviceUrl));
+
+            IMessageActivity message = Activity.CreateMessageActivity();
+            if (!string.IsNullOrEmpty(conversationId) && !string.IsNullOrEmpty(channelId))
+            {
+                message.ChannelId = channelId;
+            }
+            else
+            {
+                conversationId = (await connector.Conversations.CreateDirectConversationAsync(botAccount, userAccount)).Id;
+            }
+            message.From = botAccount;
+            message.Recipient = userAccount;
+            message.Conversation = new ConversationAccount(id: conversationId);
+            message.Locale = "en-Us";
+            message.Text = "Reservation Cancellation Notification";
+            await RideReservation.GenerateHeroCardNotificationMessage(message, reservation, "Cancellation Receipt", "Your reservation has been cancelled");
+            reservation = null;
             await connector.Conversations.SendToConversationAsync((Activity)message);
         }
     }

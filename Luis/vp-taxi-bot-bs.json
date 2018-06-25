@@ -1,0 +1,451 @@
+{
+  "luis_schema_version": "3.0.0",
+  "versionId": "0.2",
+  "name": "vp-taxi-bot-bs",
+  "desc": "Default Intents for Azure Bot Service V2",
+  "culture": "en-us",
+  "intents": [
+    {
+      "name": "Cancel"
+    },
+    {
+      "name": "Greeting"
+    },
+    {
+      "name": "Help"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "RideReservation"
+    }
+  ],
+  "entities": [
+    {
+      "name": "DropLocation",
+      "roles": []
+    },
+    {
+      "name": "PickUpLocation",
+      "roles": [
+        "reserveataxi"
+      ]
+    }
+  ],
+  "composites": [
+    {
+      "name": "RideReservation",
+      "children": [
+        "datetimeV2",
+        "DropLocation",
+        "PickUpLocation"
+      ],
+      "roles": []
+    }
+  ],
+  "closedLists": [],
+  "patternAnyEntities": [],
+  "regex_entities": [],
+  "prebuiltEntities": [
+    {
+      "name": "datetimeV2",
+      "roles": []
+    }
+  ],
+  "model_features": [],
+  "regex_features": [],
+  "patterns": [],
+  "utterances": [
+    {
+      "text": "abort",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "cancel",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "disregard",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "do not do it",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "do not do that",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "don't",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "don't do it",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "don't do that",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "get a taxi to pick me up at biltmore fashion mall around 3:00 pm",
+      "intent": "RideReservation",
+      "entities": [
+        {
+          "entity": "PickUpLocation",
+          "startPos": 28,
+          "endPos": 48
+        }
+      ]
+    },
+    {
+      "text": "get me a ride for 6 pm out of chandler az",
+      "intent": "RideReservation",
+      "entities": [
+        {
+          "entity": "PickUpLocation",
+          "startPos": 30,
+          "endPos": 40
+        }
+      ]
+    },
+    {
+      "text": "get me a taxi to chander fashion square",
+      "intent": "RideReservation",
+      "entities": [
+        {
+          "entity": "PickUpLocation",
+          "startPos": 17,
+          "endPos": 38
+        }
+      ]
+    },
+    {
+      "text": "good afternoon",
+      "intent": "Greeting",
+      "entities": []
+    },
+    {
+      "text": "good evening",
+      "intent": "Greeting",
+      "entities": []
+    },
+    {
+      "text": "good morning",
+      "intent": "Greeting",
+      "entities": []
+    },
+    {
+      "text": "good night",
+      "intent": "Greeting",
+      "entities": []
+    },
+    {
+      "text": "hello",
+      "intent": "Greeting",
+      "entities": []
+    },
+    {
+      "text": "hello bot",
+      "intent": "Greeting",
+      "entities": []
+    },
+    {
+      "text": "help",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "help me",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "help me please",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "help please",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "hi",
+      "intent": "Greeting",
+      "entities": []
+    },
+    {
+      "text": "hi bot",
+      "intent": "Greeting",
+      "entities": []
+    },
+    {
+      "text": "hiya",
+      "intent": "Greeting",
+      "entities": []
+    },
+    {
+      "text": "how are you",
+      "intent": "Greeting",
+      "entities": []
+    },
+    {
+      "text": "how are you doing today?",
+      "intent": "Greeting",
+      "entities": []
+    },
+    {
+      "text": "how are you doing?",
+      "intent": "Greeting",
+      "entities": []
+    },
+    {
+      "text": "how are you today?",
+      "intent": "Greeting",
+      "entities": []
+    },
+    {
+      "text": "i am stuck",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "i need a car",
+      "intent": "RideReservation",
+      "entities": []
+    },
+    {
+      "text": "i need a car at chandler az",
+      "intent": "RideReservation",
+      "entities": [
+        {
+          "entity": "PickUpLocation",
+          "startPos": 16,
+          "endPos": 26
+        }
+      ]
+    },
+    {
+      "text": "i need a ride from mesa az to gilbert arizona",
+      "intent": "RideReservation",
+      "entities": [
+        {
+          "entity": "PickUpLocation",
+          "startPos": 19,
+          "endPos": 25
+        },
+        {
+          "entity": "DropLocation",
+          "startPos": 30,
+          "endPos": 44
+        }
+      ]
+    },
+    {
+      "text": "i want to reserve a ride",
+      "intent": "RideReservation",
+      "entities": []
+    },
+    {
+      "text": "i would like to cancel",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "i'm stuck",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "limo",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "make a reservation",
+      "intent": "RideReservation",
+      "entities": []
+    },
+    {
+      "text": "mesa az",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "my water bottle is green.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "never mind",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "pick me at chandler az and drop me at biltmore fashion phoenix",
+      "intent": "RideReservation",
+      "entities": [
+        {
+          "entity": "PickUpLocation",
+          "startPos": 11,
+          "endPos": 21
+        },
+        {
+          "entity": "DropLocation",
+          "startPos": 38,
+          "endPos": 61
+        }
+      ]
+    },
+    {
+      "text": "please cancel",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "please disregard",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "please help me",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "please stop",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "reserve a ride for 12:30 pm",
+      "intent": "RideReservation",
+      "entities": []
+    },
+    {
+      "text": "reserve a ride for 7 pm from sottsdale arizona",
+      "intent": "RideReservation",
+      "entities": [
+        {
+          "entity": "PickUpLocation",
+          "startPos": 29,
+          "endPos": 45
+        }
+      ]
+    },
+    {
+      "text": "reserve a ride from tempe az to mesa az",
+      "intent": "RideReservation",
+      "entities": [
+        {
+          "entity": "PickUpLocation",
+          "startPos": 20,
+          "endPos": 27
+        },
+        {
+          "entity": "DropLocation",
+          "startPos": 32,
+          "endPos": 38
+        }
+      ]
+    },
+    {
+      "text": "reserve a ride from tempe town lake to superstition springs mall at 5 pm this afternoon",
+      "intent": "RideReservation",
+      "entities": [
+        {
+          "entity": "PickUpLocation",
+          "startPos": 20,
+          "endPos": 34
+        },
+        {
+          "entity": "DropLocation",
+          "startPos": 39,
+          "endPos": 63
+        }
+      ]
+    },
+    {
+      "text": "reserve a taxi from scottsdale fashion square to tempe az",
+      "intent": "RideReservation",
+      "entities": [
+        {
+          "entity": "PickUpLocation",
+          "startPos": 20,
+          "endPos": 44
+        },
+        {
+          "entity": "DropLocation",
+          "startPos": 49,
+          "endPos": 56
+        }
+      ]
+    },
+    {
+      "text": "reserve ride",
+      "intent": "RideReservation",
+      "entities": []
+    },
+    {
+      "text": "schedule a ride for 6:30 pm",
+      "intent": "RideReservation",
+      "entities": []
+    },
+    {
+      "text": "sedan",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "stop",
+      "intent": "Cancel",
+      "entities": []
+    },
+    {
+      "text": "there is a large deep dish pizza in your future.",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "what can i say",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "what can you do",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "what can you help me with",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "what do i do now?",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "what do i do?",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "why doesn't this work ?",
+      "intent": "Help",
+      "entities": []
+    }
+  ]
+}

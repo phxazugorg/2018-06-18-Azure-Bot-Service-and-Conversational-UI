@@ -198,6 +198,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="AdaptiveCards\NotificationCard.json" />
+    <Content Include="Luis\vp-taxi-bot-bs.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

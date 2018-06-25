@@ -11,12 +11,12 @@ using System.Threading;
 
 namespace Microsoft.Bot.Sample.SimpleEchoBot
 {
-    [LuisModel("22acfa00-8262-4609-8f7b-a42bcee5a905", "f06612b74bb744c6b0b0a0f3e153be74")]
+    [LuisModel("0527ac73-9787-4b1d-876a-f0ecd87cbde7", "b4efdc96406f4e2f9d9476925ce8c2cb")]
     [Serializable]
     public class LuisDialog : LuisDialog<object>
     {
-        [NonSerialized]
-        Timer t;
+        //[NonSerialized]
+        //Timer t;
 
         [LuisIntent("")]
         [LuisIntent("None")]
@@ -40,13 +40,12 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             context.Wait(this.MessageReceived);
         }
 
-        [LuisIntent("InquireGreeting")]
-        public async Task InquireGreeting(IDialogContext context, LuisResult result)
+        [LuisIntent("Cancel")]
+        public async Task Cancel(IDialogContext context, LuisResult result)
         {
-            string message = $"I am doing great, thank you!";
-
+            string message = $"Cancelling reservation.";
             await context.PostAsync(message);
-
+            await ConversationStarter.Cancel(context.Activity.Conversation.Id, context.Activity.ChannelId); 
             context.Wait(this.MessageReceived);
         }
 
